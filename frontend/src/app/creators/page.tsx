@@ -12,7 +12,7 @@ export default function Creators() {
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/creators/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/creators/`)
       .then(res => res.json())
       .then(data => {
         setCreators(data)

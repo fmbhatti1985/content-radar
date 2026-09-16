@@ -24,7 +24,7 @@ export default function Opportunities() {
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/opportunities/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/opportunities/`)
       .then(res => res.json())
       .then(data => {
         setItems(data)

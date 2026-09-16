@@ -35,7 +35,7 @@ export default function NewScanPage() {
     
     try {
       // 1. Create scan on backend
-      const res = await fetch("http://localhost:8000/api/v1/scans/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -56,7 +56,7 @@ export default function NewScanPage() {
       // 2. Poll for progress
       const interval = setInterval(async () => {
         try {
-          const pollRes = await fetch(`http://localhost:8000/api/v1/scans/${scanId}`);
+          const pollRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/${scanId}`);
           if (pollRes.ok) {
             const pollData = await pollRes.json();
             setProgress(pollData.progress || 5);

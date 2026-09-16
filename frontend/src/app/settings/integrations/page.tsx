@@ -11,7 +11,7 @@ export default function IntegrationsPage() {
 
   useEffect(() => {
     // Fetch real connected integrations from the database
-    fetch("http://localhost:8000/api/v1/integrations/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/integrations/`)
       .then(res => res.json())
       .then(data => {
         setConnected(data.map((i: any) => i.platform.toLowerCase()))
@@ -28,13 +28,13 @@ export default function IntegrationsPage() {
     
     // If already connected, call the backend to disconnect and delete tokens
     if (connected.includes(platformLower)) {
-      fetch(`http://localhost:8000/api/v1/integrations/${platformLower}`, { method: "DELETE" })
+      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/integrations/${platformLower}`, { method: "DELETE" })
         .then(() => setConnected(prev => prev.filter(p => p !== platformLower)))
       return
     }
 
     // If not connected, redirect the browser to the backend OAuth login route
-    window.location.href = `http://localhost:8000/api/v1/integrations/${platformLower}/login?t=${Date.now()}`
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/integrations/${platformLower}/login?t=${Date.now()}`
   }
 
   const renderConnectButton = (platform: string) => {

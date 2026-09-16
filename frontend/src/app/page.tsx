@@ -8,7 +8,7 @@ export default function Dashboard() {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/dashboard/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/dashboard/`)
       .then(res => res.json())
       .then(setData)
       .catch(console.error);

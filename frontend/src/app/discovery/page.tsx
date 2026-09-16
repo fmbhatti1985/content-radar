@@ -11,7 +11,7 @@ export default function Discovery() {
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/content/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/content/`)
       .then(res => res.json())
       .then(data => {
         setContentItems(data)

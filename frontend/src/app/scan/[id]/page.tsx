@@ -11,7 +11,7 @@ export default function ScanResultsPage({ params }: { params: Promise<{ id: stri
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/v1/scans/${id}/results`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/${id}/results`)
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch scan results")
         return res.json()

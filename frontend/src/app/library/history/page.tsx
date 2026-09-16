@@ -22,7 +22,7 @@ export default function ScanHistoryPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/history/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/history/`)
       .then(res => res.json())
       .then(data => {
         setScans(data)

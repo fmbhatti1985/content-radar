@@ -12,7 +12,7 @@ export default function SavedContentPage() {
 
   const fetchSaved = () => {
     setLoading(true)
-    fetch("http://localhost:8000/api/v1/saved/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/saved/`)
       .then(res => res.json())
       .then(data => {
         setItems(data)
@@ -30,7 +30,7 @@ export default function SavedContentPage() {
 
   const handleUnsave = async (savedId: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/saved/${savedId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/saved/${savedId}`, {
         method: "DELETE"
       })
       if (res.ok) {
