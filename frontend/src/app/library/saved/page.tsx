@@ -5,6 +5,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Search, ExternalLink, Bookmark, Loader2, Trash2, BookmarkX } from "lucide-react"
 
+async function fetchWithBypass(url: any, options: any = {}) {
+  options.headers = {
+    ...options.headers,
+    'Bypass-Tunnel-Reminder': 'true'
+  };
+  return fetch(url, options);
+}
+
 export default function SavedContentPage() {
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -12,7 +20,7 @@ export default function SavedContentPage() {
 
   const fetchSaved = () => {
     setLoading(true)
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/saved/`)
+    fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/saved/`)
       .then(res => res.json())
       .then(data => {
         setItems(data)
@@ -30,7 +38,7 @@ export default function SavedContentPage() {
 
   const handleUnsave = async (savedId: string) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/saved/${savedId}`, {
+      const res = await fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/saved/${savedId}`, {
         method: "DELETE"
       })
       if (res.ok) {

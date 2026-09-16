@@ -5,13 +5,21 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input"
 import { Search, ExternalLink, Calendar, Eye, PlayCircle } from "lucide-react"
 
+async function fetchWithBypass(url: any, options: any = {}) {
+  options.headers = {
+    ...options.headers,
+    'Bypass-Tunnel-Reminder': 'true'
+  };
+  return fetch(url, options);
+}
+
 export default function Discovery() {
   const [contentItems, setContentItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/content/`)
+    fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/content/`)
       .then(res => res.json())
       .then(data => {
         setContentItems(data)

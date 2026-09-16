@@ -8,6 +8,14 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
+async function fetchWithBypass(url: any, options: any = {}) {
+  options.headers = {
+    ...options.headers,
+    'Bypass-Tunnel-Reminder': 'true'
+  };
+  return fetch(url, options);
+}
+
 const STATUS_CONFIG: Record<string, { icon: any; color: string; label: string }> = {
   completed: { icon: CheckCircle2, color: "text-green-400", label: "Completed" },
   failed:    { icon: XCircle,      color: "text-red-400",   label: "Failed" },
@@ -22,7 +30,7 @@ export default function ScanHistoryPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/history/`)
+    fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/history/`)
       .then(res => res.json())
       .then(data => {
         setScans(data)

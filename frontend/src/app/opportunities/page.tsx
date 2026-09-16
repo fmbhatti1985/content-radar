@@ -5,6 +5,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Search, ExternalLink, TrendingUp, Loader2, ArrowUpRight } from "lucide-react"
 
+async function fetchWithBypass(url: any, options: any = {}) {
+  options.headers = {
+    ...options.headers,
+    'Bypass-Tunnel-Reminder': 'true'
+  };
+  return fetch(url, options);
+}
+
 const PLATFORM_COLORS: Record<string, string> = {
   youtube: "bg-red-500/10 text-red-400",
   tiktok: "bg-pink-500/10 text-pink-400",
@@ -24,7 +32,7 @@ export default function Opportunities() {
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/opportunities/`)
+    fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/opportunities/`)
       .then(res => res.json())
       .then(data => {
         setItems(data)

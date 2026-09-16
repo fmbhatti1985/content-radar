@@ -6,13 +6,21 @@ import { Input } from "@/components/ui/input"
 import { Search, ExternalLink, Users, Video } from "lucide-react"
 import Link from "next/link"
 
+async function fetchWithBypass(url: any, options: any = {}) {
+  options.headers = {
+    ...options.headers,
+    'Bypass-Tunnel-Reminder': 'true'
+  };
+  return fetch(url, options);
+}
+
 export default function Creators() {
   const [creators, setCreators] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/creators/`)
+    fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/creators/`)
       .then(res => res.json())
       .then(data => {
         setCreators(data)

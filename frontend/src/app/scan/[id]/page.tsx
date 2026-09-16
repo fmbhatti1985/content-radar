@@ -4,6 +4,14 @@ import { useEffect, useState, use } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2, Download, Share, Loader2 } from "lucide-react"
 
+async function fetchWithBypass(url: any, options: any = {}) {
+  options.headers = {
+    ...options.headers,
+    'Bypass-Tunnel-Reminder': 'true'
+  };
+  return fetch(url, options);
+}
+
 export default function ScanResultsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const [data, setData] = useState<any>(null)
@@ -11,7 +19,7 @@ export default function ScanResultsPage({ params }: { params: Promise<{ id: stri
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/${id}/results`)
+    fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/${id}/results`)
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch scan results")
         return res.json()

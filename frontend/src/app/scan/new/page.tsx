@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Radar, Settings2, Play, CheckCircle2 } from "lucide-react"
 
+async function fetchWithBypass(url: any, options: any = {}) {
+  options.headers = {
+    ...options.headers,
+    'Bypass-Tunnel-Reminder': 'true'
+  };
+  return fetch(url, options);
+}
+
 export default function NewScanPage() {
   const router = useRouter()
   const [isScanning, setIsScanning] = useState(false)
@@ -35,7 +43,7 @@ export default function NewScanPage() {
     
     try {
       // 1. Create scan on backend
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/`, {
+      const res = await fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -56,7 +64,7 @@ export default function NewScanPage() {
       // 2. Poll for progress
       const interval = setInterval(async () => {
         try {
-          const pollRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/${scanId}`);
+          const pollRes = await fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/scans/${scanId}`);
           if (pollRes.ok) {
             const pollData = await pollRes.json();
             setProgress(pollData.progress || 5);

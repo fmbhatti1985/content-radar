@@ -5,13 +5,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Video, Camera, Smartphone, Globe, Loader2, CheckCircle2 } from "lucide-react"
 
+async function fetchWithBypass(url: any, options: any = {}) {
+  options.headers = {
+    ...options.headers,
+    'Bypass-Tunnel-Reminder': 'true'
+  };
+  return fetch(url, options);
+}
+
 export default function IntegrationsPage() {
   const [connected, setConnected] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // Fetch real connected integrations from the database
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/integrations/`)
+    fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/integrations/`)
       .then(res => res.json())
       .then(data => {
         setConnected(data.map((i: any) => i.platform.toLowerCase()))
@@ -28,7 +36,7 @@ export default function IntegrationsPage() {
     
     // If already connected, call the backend to disconnect and delete tokens
     if (connected.includes(platformLower)) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/integrations/${platformLower}`, { method: "DELETE" })
+      fetchWithBypass(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/integrations/${platformLower}`, { method: "DELETE" })
         .then(() => setConnected(prev => prev.filter(p => p !== platformLower)))
       return
     }
